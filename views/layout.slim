@@ -7,7 +7,12 @@ html lang="en"
     title Document
   body
     nav
-      a href="/registrering" Register
-      a href="/showlogin" Login
+      a href="/" Hem  
+      -if session[:id] == nil
+        a href="/registrering" Ny användare
+        a href="/showlogin" Logga in
+      a href="/recipe" recept 
+      -if session[:id] != nil 
+        a href="/recipe/new" nytt recept
 
     == yield

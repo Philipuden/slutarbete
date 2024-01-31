@@ -1,0 +1,7 @@
+ol
+  - recipes.each do |recipe|
+    li 
+      a href="recipe/#{recipe['recipeId']}" #{recipe["name"]}
+      a href="recipe/#{recipe['recipeId']}/edit" Uppdatera
+      form method="POST" action="recipe/#{recipe['recipeId']}/delete"
+        input type="submit" value="Radera recept"
