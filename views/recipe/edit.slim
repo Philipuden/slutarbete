@@ -1,4 +1,12 @@
-form action="/recipe/#{result['recipeId']}/update" method="post"
-    input type="text" name="title" value="#{result['Title']}"
-    input type="hidden" name="ArtistId" value="#{result['ArtistId']}"
-    input type="submit" value="Edit it"/
+form action="/recipe/#{recipes['recipeId']}/update" method="post"
+    input type="text" name="title" value="#{recipes['name']}"
+    br
+    p Såhär gör du
+    textarea name="how_to" cols="30" rows="10" #{recipes['how_to']}
+    p Vill du andra se ska ditt recept?
+    select name="operator"
+       option value="nej" Nej
+       option value="ja" selected="selected" Ja
+    br
+    br
+    input type="submit" value="Uppdatera"/

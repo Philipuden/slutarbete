@@ -34,6 +34,11 @@ post('/login') do
     end
 end
 
+get ('/logout') do
+    session[:id] = nil
+    redirect('/')
+end
+
 post('/user/new') do
     username = params[:username]
     password = params[:password]
@@ -52,8 +57,9 @@ get('/recipe') do
     db = SQLite3::Database.new("db/db_recipe.db")
     db.results_as_hash = true
     result = db.execute("SELECT * FROM user_recipes")
+    @id = session[:id]
     slim(:"recipe/index",locals:{recipes:result})
-  end
+end
   
 get('/recipe/new') do
     slim(:"recipe/new")
@@ -90,7 +96,7 @@ get('/recipe/:id/edit') do
     db = SQLite3::Database.new("db/db_recipe.db")
     db.results_as_hash = true
     result = db.execute("SELECT * FROM user_recipes WHERE recipeId = ?",id).first
-    slim(:"recipe/edit", locals:{result:result})
+    slim(:"recipe/edit", locals:{recipes:result})
 end
   
   
