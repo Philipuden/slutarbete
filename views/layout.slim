@@ -6,6 +6,8 @@ html lang="en"
     link rel="stylesheet" href="/css/style.css"/
     title Document
   body
+    - if flash[:notice]
+      p.notice = flash[:notice]
     nav
       a href="/" Hem
       a href="/recipe" recept   
@@ -17,3 +19,4 @@ html lang="en"
         a href="/showlogin" Logga in  
 
     == yield
+    script src="js/main.js" 

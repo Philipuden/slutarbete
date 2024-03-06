@@ -1,18 +1,8 @@
+nav 
+  a href="/my_recipe" Mina Recept 
+
 ol
-  - recipes.each do |recipe|
-    li 
-      a href="recipe/#{recipe['recipeId']}" #{recipe["name"]}
-      a href="recipe/#{recipe['recipeId']}/edit" Uppdatera
-      form method="POST" action="recipe/#{recipe['recipeId']}/delete"
-      input type="submit" value="Radera recept"
-
-
-
-
-    / - if "#{recipes['user_id']}" == id.to_s
-    /     a href="recipe/#{recipe['recipeId']}" #{recipe["name"]}
-    /     a href="recipe/#{recipe['recipeId']}/edit" Uppdatera
-    /     form method="POST" action="recipe/#{recipe['recipeId']}/delete"
-    /     input type="submit" value="Radera recept"
-    / - elsif "#{recipes['is_public']}" == "ja"
-    /      a href="recipe/#{recipe['recipeId']}" #{recipe["name"]}
+  - recipes.each do |recipe| 
+    -if "#{recipe['is_public']}" == "ja" || "#{recipe["user_id"]}" == "#{session[:id]}"
+      li
+        a href="recipe/#{recipe['recipeId']}" #{recipe["name"]}
