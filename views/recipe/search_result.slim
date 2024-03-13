@@ -1,0 +1,10 @@
+==slim :recipe_nav
+
+h2 Sökresultat
+ul
+  - if session[:results].nil? || session[:results].empty?
+    li Inga resultat hittades för sökningen.
+  - else
+    - session[:results].each do |result|
+        li 
+            a href="recipe/#{result['recipeId']}" #{result["name"]}

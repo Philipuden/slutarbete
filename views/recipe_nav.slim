@@ -1,0 +1,11 @@
+nav 
+  a href="/my_recipe" Mina Recept
+  a href="/recipe" Alla recept 
+
+  form action="/search" method="POST"
+    label for="query" Sök:
+    select name="search_value"
+       option value="Recept" Recept
+       option value="Ingredienser" selected="selected" Ingredienser
+    input type="text" name="query" id="query"
+    input type="submit" value="Sök"

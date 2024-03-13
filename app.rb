@@ -77,6 +77,19 @@ end
 get('/recipe/new') do
     slim(:"recipe/new")
 end
+
+post ('/search') do
+    query = params[:query]
+    p query
+    db = connect_db()
+    query_string = "%#{query}%"
+    session[:results] = db.execute("SELECT * FROM user_recipes WHERE name LIKE ?", query_string)
+    redirect('/search_result')
+end
+
+get ('/search_result') do
+    slim (:"recipe/search_result")
+end
   
 post('/recipe/new') do
     title = params[:title].to_s
