@@ -59,8 +59,11 @@ end
 
 get('/recipe') do
     db = connect_db()
+    id = session[:id]
     result = db.execute("SELECT * FROM user_recipes")
-    slim(:"recipe/index",locals:{recipes:result})
+    result_temp = db.execute("SELECT recipe_id FROM favourites WHERE user_id = ?",id)
+    result2 = result_temp.to_s
+    slim(:"recipe/index",locals:{recipes:result, result:result2})
 end
 
 get('/my_recipe') do
@@ -76,6 +79,31 @@ end
   
 get('/recipe/new') do
     slim(:"recipe/new")
+end
+
+get('/favourites') do
+    if session[:id] != nil
+        db = connect_db()
+        id = session[:id]
+        x = 0
+        recipes = db.execute("SELECT recipe_id FROM favourites WHERE user_id = ?",id)
+        while recipes.length - 1 < x
+            result.append(db.execute("SELECT * FROM user_recipes WHERE recipeId = ?",recipes[x]))
+            x += 1
+        end
+        p result
+        slim(:"recipe/favourites",locals:{recipes:result})
+    else
+        slim(:login)
+    end
+end
+
+post('/favourites') do
+    id = session[:id]
+    recipeId = params[:favourite_recipeId]
+    db = connect_db()
+    db.execute("INSERT INTO favourites (recipe_id, user_id) VALUES (?, ?)",recipeId, id )
+    redirect('/recipe')
 end
 
 post ('/search') do
@@ -95,9 +123,10 @@ post('/recipe/new') do
     title = params[:title].to_s
     how_to = params[:how_to].to_s
     is_public = params[:is_public].to_s
+    img = params[:img][:tempfile].read if params[:img]
     id = session[:id]
     db = connect_db()
-    db.execute("INSERT INTO user_recipes (name, how_to, is_public, user_id) VALUES (?, ?, ?, ?)",title, how_to, is_public, id)
+    db.execute("INSERT INTO user_recipes (name, how_to, is_public, user_id, img) VALUES (?, ?, ?, ?, ?)",title, how_to, is_public, id, img)
     redirect('/recipe')
 end
   
@@ -114,7 +143,8 @@ post('/recipe/:id/update') do
     title = params[:title].to_s
     how_to = params[:how_to].to_s
     is_public = params[:is_public].to_s
-    db.execute("UPDATE user_recipes SET name = ?, how_to = ?, is_public = ? WHERE recipeID = ?",title,how_to,is_public,id)
+    img = params[:img][:tempfile].read if params[:img]
+    db.execute("UPDATE user_recipes SET name = ?, how_to = ?, is_public = ?, img = ? WHERE recipeID = ?",title,how_to,is_public,id,img)
     redirect("/recipe")
 end
   

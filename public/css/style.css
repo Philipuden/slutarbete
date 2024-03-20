@@ -1,3 +1,7 @@
+*{
+  font-family: 'Times New Roman', Times, serif;
+}
+
 nav {
     font-family: Arial, Helvetica, sans-serif;
     text-transform: uppercase;
@@ -18,4 +22,5 @@ nav {
     position:fixed;
     font-size:4rem;
     font-family:Arial, Helvetica, sans-serif;
-  }   
+  }
+
