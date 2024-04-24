@@ -51,6 +51,9 @@ post('/user/new') do
         password_digest = BCrypt::Password.create(password)
         db = connect_db()
         db.execute("INSERT INTO users (username,pwdigest) VALUES (?,?)",username,password_digest)
+        id = db.execute("SELECT id FROM users WHERE username = ?",username).first
+        session[:id] = id
+        session[:username] = username
         redirect('/')
     else
         "Lösenordet matchar inte"
@@ -85,14 +88,8 @@ get('/favourites') do
     if session[:id] != nil
         db = connect_db()
         id = session[:id]
-        x = 0
-        recipes = db.execute("SELECT recipe_id FROM favourites WHERE user_id = ?",id)
-        while recipes.length - 1 < x
-            result.append(db.execute("SELECT * FROM user_recipes WHERE recipeId = ?",recipes[x]))
-            x += 1
-        end
-        p result
-        slim(:"recipe/favourites",locals:{recipes:result})
+        recipe_id = db.execute("SELECT recipe_id FROM favourites WHERE user_id = ?",id)
+        slim(:"recipe/favourites",locals:{ id:recipe_id})
     else
         slim(:login)
     end
