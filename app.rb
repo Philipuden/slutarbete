@@ -103,6 +103,15 @@ post('/favourites') do
     redirect('/recipe')
 end
 
+post('/favourites_delete') do
+    id = session[:id]
+    recipeId = params[:favourite_recipeId]
+    db = connect_db()
+    p recipeId
+    db.execute("DELETE FROM favourites WHERE recipe_id = ? AND user_id = ?",recipeId, id )
+    redirect('/recipe')
+end
+
 post ('/search') do
     query = params[:query]
     p query
@@ -122,9 +131,7 @@ post('/recipe/new') do
     is_public = params[:is_public].to_s
     img = params[:img][:tempfile].read if params[:img]
     id = session[:id]
-    db = connect_db()
-    db.execute("INSERT INTO user_recipes (name, how_to, is_public, user_id, img) VALUES (?, ?, ?, ?, ?)",title, how_to, is_public, id, img)
-    redirect('/recipe')
+    recipe_new_post(title, how_to, is_public, img, id)
 end
   
 post('/recipe/:id/delete') do

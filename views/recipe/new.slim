@@ -4,8 +4,8 @@ form action="/recipe/new" method="post" enctype="multipart/form-data"
    input type="text" name="title" placeholder="Namnet på receptet"
    br
    p Lägg till bild 
-   br
    input type="file" name="img" accept="image/*" 
+   br
    br
    textarea name="how_to" cols="30" rows="10" placeholder="Här skriver du hur man gör receptet"
    p Vill du andra ska se ditt recept?
@@ -15,3 +15,10 @@ form action="/recipe/new" method="post" enctype="multipart/form-data"
    br
    br
    input type="submit" value="Skapa recept"
+
+
+- if session[:error]
+   p#fel_meddelande= session.delete(:error)  
+
+- if session[:error]
+   p#fel_meddelande_reg= session.delete(:error)

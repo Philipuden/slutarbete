@@ -7,10 +7,10 @@ ol
         a href="recipe/#{recipe['recipeId']}" #{recipe["name"]}
         -if result.include?("#{recipe['recipeId']}") && session[:id] != nil
             form action="/favourites_delete" method="post"
-            input type="hidden" name="favourite_recipeId" value="#{recipe["recipeId"]}" 
-            input type="submit" value="Ta bort favorit"
+              input type="hidden" name="favourite_recipeId" value="#{recipe["recipeId"]}" 
+              input type="submit" value="Ta bort favorit"
         -elsif session[:id] != nil
-          form action="/favourites" method="post"
+          form action="/favourites" method="post"  
             input type="hidden" name="favourite_recipeId" value="#{recipe["recipeId"]}" 
             input type="submit" value="Lägg till favorit"
 
