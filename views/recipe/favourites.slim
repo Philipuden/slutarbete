@@ -1,6 +1,6 @@
 ==slim :recipe_nav
 
 ol
-- id.each do |recipe|
+- favourites.each do |recipe|
     li   
-        a href="recipe/#{recipe['recipe_id']}" favorit
+        a href="recipe/#{recipe['recipe_id']}" #{recipe["name"]}

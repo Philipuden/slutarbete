@@ -1,5 +1,7 @@
 ==slim :recipe_nav
 
+-p session[:results]
+
 h2 Sökresultat
 ul
   - if session[:results].nil? || session[:results].empty?

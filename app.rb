@@ -64,7 +64,7 @@ get('/recipe') do
     db = connect_db()
     id = session[:id]
     result = db.execute("SELECT * FROM user_recipes")
-    result_temp = db.execute("SELECT recipe_id FROM favourites WHERE user_id = ?",id)
+    result_temp = db.execute("SELECT recipe_id FROM favourites WHERE users_id = ?",id)
     result2 = result_temp.to_s
     slim(:"recipe/index",locals:{recipes:result, result:result2})
 end
@@ -88,8 +88,9 @@ get('/favourites') do
     if session[:id] != nil
         db = connect_db()
         id = session[:id]
-        recipe_id = db.execute("SELECT recipe_id FROM favourites WHERE user_id = ?",id)
-        slim(:"recipe/favourites",locals:{ id:recipe_id})
+        favourites = db.execute("SELECT user_recipes.name, favourites.recipe_id FROM favourites INNER JOIN user_recipes ON favourites.recipe_id = user_recipes.recipeId WHERE users_id = ?", id)
+        p favourites
+        slim(:"recipe/favourites",locals:{favourites:favourites})
     else
         slim(:login)
     end
@@ -99,7 +100,7 @@ post('/favourites') do
     id = session[:id]
     recipeId = params[:favourite_recipeId]
     db = connect_db()
-    db.execute("INSERT INTO favourites (recipe_id, user_id) VALUES (?, ?)",recipeId, id )
+    db.execute("INSERT INTO favourites (recipe_id, users_id) VALUES (?, ?)",recipeId, id )
     redirect('/recipe')
 end
 
@@ -108,16 +109,15 @@ post('/favourites_delete') do
     recipeId = params[:favourite_recipeId]
     db = connect_db()
     p recipeId
-    db.execute("DELETE FROM favourites WHERE recipe_id = ? AND user_id = ?",recipeId, id )
+    db.execute("DELETE FROM favourites WHERE recipe_id = ? AND users_id = ?",recipeId, id )
     redirect('/recipe')
 end
 
 post ('/search') do
     query = params[:query]
-    p query
     db = connect_db()
     query_string = "%#{query}%"
-    session[:results] = db.execute("SELECT * FROM user_recipes WHERE name LIKE ?", query_string)
+    session[:results] = db.execute("SELECT recipeId, name FROM user_recipes WHERE name LIKE ?", query_string)
     redirect('/search_result')
 end
 
